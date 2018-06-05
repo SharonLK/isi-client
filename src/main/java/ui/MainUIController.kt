@@ -28,7 +28,7 @@ class MainUIController : Controller() {
         val socket = Socket(server, port)
 
         thread(start = true) {
-            val socketIn = BufferedReader(InputStreamReader(socket.getInputStream()))
+            val socketIn = BufferedReader(InputStreamReader(socket.getInputStream(), "UTF-8"))
 
             var line = socketIn.readLine()
             val sb = StringBuilder()
