@@ -10,8 +10,8 @@ import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
 import java.io.InputStreamReader
-import java.net.Socket
-import kotlin.concurrent.thread
+import java.net.HttpURLConnection
+import java.net.URL
 
 class MainUIController : Controller() {
     val names: ObservableList<Function> = FXCollections.observableArrayList()
@@ -25,15 +25,18 @@ class MainUIController : Controller() {
         val server = json["server"] as String
         val port = (json["port"] as Long).toInt()
 
-        val socket = Socket(server, port)
+        val url = URL("http://$server:$port")
+        val connection = url.openConnection() as HttpURLConnection
+        connection.requestMethod = "GET"
 
-        thread(start = true) {
-            val socketIn = BufferedReader(InputStreamReader(socket.getInputStream(), "UTF-8"))
+        if (connection.responseCode == HttpURLConnection.HTTP_OK) {
+            val socketIn = BufferedReader(InputStreamReader(connection.inputStream))
 
-            var line = socketIn.readLine()
             val sb = StringBuilder()
+            var line = socketIn.readLine()
             while (line != null) {
                 sb.append(line).append("\n")
+
                 line = socketIn.readLine()
             }
 
@@ -46,7 +49,6 @@ class MainUIController : Controller() {
             }
 
             socketIn.close()
-            socket.close()
         }
     }
 
