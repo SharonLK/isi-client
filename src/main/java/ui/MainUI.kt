@@ -21,7 +21,6 @@ class Screen : App(HelloWorld::class, InternalWindow.Styles::class) {
         stage.height = 720.0
 
         stage.show()
-        stage.isMaximized = true
     }
 }
 
@@ -33,9 +32,7 @@ class HelloWorld : View() {
         spacingProperty().set(20.0)
 
         listview<String> {
-            items.add("Ping")
-            items.add("Simple Echo")
-            items.add("Cat")
+            itemsProperty().set(controller.names)
 
             style {
                 fontSize = Dimension(1.5, Dimension.LinearUnits.em)
