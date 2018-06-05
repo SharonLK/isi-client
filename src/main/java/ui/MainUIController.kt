@@ -31,16 +31,8 @@ class MainUIController : Controller() {
 
         if (connection.responseCode == HttpURLConnection.HTTP_OK) {
             val socketIn = BufferedReader(InputStreamReader(connection.inputStream))
-
-            val sb = StringBuilder()
-            var line = socketIn.readLine()
-            while (line != null) {
-                sb.append(line).append("\n")
-
-                line = socketIn.readLine()
-            }
-
-            val data = parser.parse(sb.toString()) as JSONObject
+            val response = socketIn.lines().reduce("", { str1, str2 -> str1 + str2 })
+            val data = parser.parse(response) as JSONObject
 
             val functions = data["functions"] as JSONArray
             for (i in 0 until functions.size) {
