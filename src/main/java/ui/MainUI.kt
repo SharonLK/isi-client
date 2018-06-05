@@ -26,12 +26,13 @@ class Screen : App(HelloWorld::class, InternalWindow.Styles::class) {
 
 class HelloWorld : View() {
     private val controller: MainUIController by inject()
-    private val function = SimpleStringProperty()
+    private val selectedName = SimpleStringProperty()
+    private val selectedUrl = SimpleStringProperty()
 
     override val root = hbox {
         spacingProperty().set(20.0)
 
-        listview<String> {
+        listview<Function> {
             itemsProperty().set(controller.names)
 
             style {
@@ -39,7 +40,8 @@ class HelloWorld : View() {
             }
 
             selectionModel.selectedItemProperty().onChange {
-                function.value = it
+                selectedName.value = it?.name
+                selectedUrl.value = it?.url
             }
 
             selectionModel.select(0)
@@ -50,8 +52,8 @@ class HelloWorld : View() {
             paddingProperty().set(Insets(10.0, 20.0, 10.0, 0.0))
             hgrow = Priority.ALWAYS
 
-            label("Simple Echo") {
-                textProperty().bind(function)
+            label {
+                textProperty().bind(selectedName)
 
                 style {
                     fontSize = Dimension(4.0, Dimension.LinearUnits.em)
@@ -60,7 +62,9 @@ class HelloWorld : View() {
                 }
             }
 
-            label("http://127.0.0.1:8080/function/simple-echo") {
+            label {
+                textProperty().bind(selectedUrl)
+
                 style {
                     fontSize = Dimension(1.5, Dimension.LinearUnits.em)
                     fontStyle = FontPosture.ITALIC
@@ -86,7 +90,7 @@ class HelloWorld : View() {
                     }
 
                     action {
-                        controller.downloadFunction(function.value)
+                        controller.downloadFunction(selectedName.value)
                     }
                 }
 

@@ -14,7 +14,7 @@ import java.net.Socket
 import kotlin.concurrent.thread
 
 class MainUIController : Controller() {
-    val names: ObservableList<String> = FXCollections.observableArrayList()
+    val names: ObservableList<Function> = FXCollections.observableArrayList()
 
     init {
         val file = File(javaClass.classLoader.getResource("config.json").file)
@@ -42,7 +42,7 @@ class MainUIController : Controller() {
             val functions = data["functions"] as JSONArray
             for (i in 0 until functions.size) {
                 val function = functions[i] as JSONObject
-                names.add(function["name"] as String)
+                names.add(Function(function["name"] as String, function["url"] as String))
             }
 
             socketIn.close()
@@ -53,4 +53,8 @@ class MainUIController : Controller() {
     fun downloadFunction(function: String) {
         println(function)
     }
+}
+
+class Function(val name: String, val url: String) {
+    override fun toString(): String = name
 }
