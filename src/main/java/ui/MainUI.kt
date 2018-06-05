@@ -30,21 +30,40 @@ class HelloWorld : View() {
     private val selectedUrl = SimpleStringProperty()
 
     override val root = hbox {
-        spacingProperty().set(20.0)
+        spacing = 20.0
 
-        listview<Function> {
-            itemsProperty().set(controller.names)
+        vbox {
+            padding = Insets(20.0)
+            spacing = 20.0
 
-            style {
-                fontSize = Dimension(1.5, Dimension.LinearUnits.em)
+            listview<Function> {
+                vgrow = Priority.ALWAYS
+                itemsProperty().set(controller.names)
+
+                style {
+                    fontSize = Dimension(1.5, Dimension.LinearUnits.em)
+                }
+
+                selectionModel.selectedItemProperty().onChange {
+                    selectedName.value = it?.name
+                    selectedUrl.value = it?.url
+                }
+
+                selectionModel.select(0)
             }
 
-            selectionModel.selectedItemProperty().onChange {
-                selectedName.value = it?.name
-                selectedUrl.value = it?.url
-            }
+            button("Deploy New Function") {
+                prefHeightProperty().set(60.0)
+                maxWidth = Double.MAX_VALUE
+                hgrow = Priority.ALWAYS
 
-            selectionModel.select(0)
+                style {
+                    fontSize = Dimension(1.5, Dimension.LinearUnits.em)
+                    backgroundColor += c("#7EAB75")
+                    textFill = c("#FFFFFF")
+                    fontWeight = FontWeight.BOLD
+                }
+            }
         }
 
         vbox {
