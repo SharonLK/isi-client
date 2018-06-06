@@ -18,30 +18,50 @@ class DeployNewFunctionUI : View() {
             vgap = 10.0
 
             label("Name:") {
+                style {
+                    fontSize = Dimension(1.5, Dimension.LinearUnits.em)
+                }
+
                 gridpaneConstraints {
                     columnRowIndex(0, 0)
                 }
             }
 
             textfield {
+                style {
+                    fontSize = Dimension(1.5, Dimension.LinearUnits.em)
+                }
+
                 gridpaneConstraints {
                     columnRowIndex(1, 0)
                 }
             }
 
             label("Replicas:") {
+                style {
+                    fontSize = Dimension(1.5, Dimension.LinearUnits.em)
+                }
+
                 gridpaneConstraints {
                     columnRowIndex(0, 1)
                 }
             }
 
             textfield {
+                style {
+                    fontSize = Dimension(1.5, Dimension.LinearUnits.em)
+                }
+
                 gridpaneConstraints {
                     columnRowIndex(1, 1)
                 }
             }
 
             button("Select file") {
+                style {
+                    fontSize = Dimension(1.5, Dimension.LinearUnits.em)
+                }
+
                 action {
                     val fileChooser = FileChooser()
                     val file = fileChooser.showOpenDialog(null)
@@ -58,6 +78,10 @@ class DeployNewFunctionUI : View() {
 
             label("File:") {
                 textProperty().bind(selectedFile)
+
+                style {
+                    fontSize = Dimension(1.5, Dimension.LinearUnits.em)
+                }
 
                 gridpaneConstraints {
                     columnRowIndex(1, 2)

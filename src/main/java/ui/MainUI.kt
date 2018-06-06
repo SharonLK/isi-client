@@ -59,7 +59,7 @@ class HelloWorld : View() {
 
                 style {
                     fontSize = Dimension(1.5, Dimension.LinearUnits.em)
-                    backgroundColor += c("#7EAB75")
+                    backgroundColor += c("#D87B3C")
                     textFill = c("#FFFFFF")
                     fontWeight = FontWeight.BOLD
                 }
