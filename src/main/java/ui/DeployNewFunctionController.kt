@@ -23,6 +23,8 @@ class DeployNewFunctionController : Controller() {
         val url = URL("http://$server:$port/post")
         val connection = url.openConnection() as HttpURLConnection
         connection.requestMethod = "POST"
+        connection.setRequestProperty("func_name", name)
+        connection.setRequestProperty("replicas", replicas)
         connection.doOutput = true
 
         val file = File(filePath)

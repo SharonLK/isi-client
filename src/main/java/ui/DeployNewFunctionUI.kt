@@ -12,6 +12,8 @@ class DeployNewFunctionUI : View() {
 
     override val root = hbox {
         val selectedFile = SimpleStringProperty()
+        val name = SimpleStringProperty()
+        val replicas = SimpleStringProperty()
 
         title = "Deploy New Function"
 
@@ -30,6 +32,8 @@ class DeployNewFunctionUI : View() {
             }
 
             textfield {
+                textProperty().bindBidirectional(name)
+
                 style {
                     fontSize = Dimension(1.5, Dimension.LinearUnits.em)
                 }
@@ -50,6 +54,8 @@ class DeployNewFunctionUI : View() {
             }
 
             textfield {
+                textProperty().bindBidirectional(replicas)
+
                 style {
                     fontSize = Dimension(1.5, Dimension.LinearUnits.em)
                 }
@@ -115,7 +121,7 @@ class DeployNewFunctionUI : View() {
                 }
 
                 action {
-                    controller.deploy("dsa", "dsa", selectedFile.value)
+                    controller.deploy(name.value, replicas.value, selectedFile.value)
                 }
             }
         }
