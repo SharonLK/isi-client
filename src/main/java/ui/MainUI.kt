@@ -63,6 +63,10 @@ class HelloWorld : View() {
                     textFill = c("#FFFFFF")
                     fontWeight = FontWeight.BOLD
                 }
+
+                action {
+                    openInternalWindow(DeployNewFunctionUI::class)
+                }
             }
         }
 
