@@ -8,6 +8,8 @@ import javafx.stage.FileChooser
 import tornadofx.*
 
 class DeployNewFunctionUI : View() {
+    private val controller: DeployNewFunctionController by inject()
+
     override val root = hbox {
         val selectedFile = SimpleStringProperty()
 
@@ -110,6 +112,10 @@ class DeployNewFunctionUI : View() {
                 gridpaneConstraints {
                     columnRowIndex(0, 4)
                     columnSpan = 2
+                }
+
+                action {
+                    controller.deploy("dsa", "dsa", selectedFile.value)
                 }
             }
         }
