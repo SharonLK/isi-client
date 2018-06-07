@@ -13,7 +13,6 @@ class DeployNewFunctionUI : View() {
     override val root = hbox {
         val selectedFile = SimpleStringProperty()
         val name = SimpleStringProperty()
-        val replicas = SimpleStringProperty()
 
         title = "Deploy New Function"
 
@@ -40,28 +39,6 @@ class DeployNewFunctionUI : View() {
 
                 gridpaneConstraints {
                     columnRowIndex(1, 0)
-                }
-            }
-
-            label("Replicas:") {
-                style {
-                    fontSize = Dimension(1.5, Dimension.LinearUnits.em)
-                }
-
-                gridpaneConstraints {
-                    columnRowIndex(0, 1)
-                }
-            }
-
-            textfield {
-                textProperty().bindBidirectional(replicas)
-
-                style {
-                    fontSize = Dimension(1.5, Dimension.LinearUnits.em)
-                }
-
-                gridpaneConstraints {
-                    columnRowIndex(1, 1)
                 }
             }
 
@@ -121,7 +98,7 @@ class DeployNewFunctionUI : View() {
                 }
 
                 action {
-                    controller.deploy(name.value, replicas.value, selectedFile.value)
+                    controller.deploy(name.value, selectedFile.value)
                 }
             }
         }

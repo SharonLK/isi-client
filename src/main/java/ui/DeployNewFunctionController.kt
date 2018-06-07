@@ -11,7 +11,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 class DeployNewFunctionController : Controller() {
-    fun deploy(name: String, replicas: String, filePath: String) {
+    fun deploy(name: String, filePath: String) {
         // Read the config file found in the resources directory
         val config = File(javaClass.classLoader.getResource("config.json").file)
         val parser = JSONParser()
@@ -26,7 +26,7 @@ class DeployNewFunctionController : Controller() {
         val connection = url.openConnection() as HttpURLConnection
         connection.requestMethod = "POST"
         connection.setRequestProperty("func_name", name)
-        connection.setRequestProperty("replicas", replicas)
+        connection.setRequestProperty("replicas", "1")
         connection.doOutput = true
 
         // Stream the ZIP file to the output stream of this HTTP connection
