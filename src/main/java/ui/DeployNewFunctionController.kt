@@ -12,14 +12,16 @@ import java.net.URL
 
 class DeployNewFunctionController : Controller() {
     fun deploy(name: String, replicas: String, filePath: String) {
+        // Read the config file found in the resources directory
         val config = File(javaClass.classLoader.getResource("config.json").file)
-
         val parser = JSONParser()
         val json = parser.parse(FileReader(config)) as JSONObject
 
+        // Get the server properties
         val server = json["server"] as String
         val port = (json["port"] as Long).toInt()
 
+        // Create an HTTP URL connection and set a POST request to the server with all needed information
         val url = URL("http://$server:$port/post")
         val connection = url.openConnection() as HttpURLConnection
         connection.requestMethod = "POST"
@@ -27,16 +29,11 @@ class DeployNewFunctionController : Controller() {
         connection.setRequestProperty("replicas", replicas)
         connection.doOutput = true
 
-        val file = File(filePath)
-        val bytes = ByteArray(file.length().toInt())
+        // Stream the ZIP file to the output stream of this HTTP connection
         val fis = FileInputStream(filePath)
         val bis = BufferedInputStream(fis)
-        bis.read(bytes, 0, bytes.size)
-        val os = connection.outputStream
-        os.write(bytes, 0, bytes.size)
-        os.flush()
+        connection.outputStream.write(bis.readBytes())
 
-        os.close()
         bis.close()
         fis.close()
 
