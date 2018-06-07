@@ -41,7 +41,10 @@ class MainUIController : Controller() {
             val functions = data["functions"] as JSONArray
             for (i in 0 until functions.size) {
                 val function = functions[i] as JSONObject
-                names.add(Function(function["name"] as String, function["url"] as String))
+                names.add(Function(function["name"] as String,
+                        function["url"] as String,
+                        (function["invocations"] as Long).toInt(),
+                        (function["replicas"] as Long).toInt()))
             }
 
             socketIn.close()
@@ -53,6 +56,6 @@ class MainUIController : Controller() {
     }
 }
 
-class Function(val name: String, val url: String) {
+class Function(val name: String, val url: String, val invocations: Int, val replicas: Int) {
     override fun toString(): String = name
 }

@@ -27,13 +27,16 @@ class Screen : App(HelloWorld::class, InternalWindow.Styles::class) {
 class HelloWorld : View() {
     private val controller: MainUIController by inject()
     private val selectedName = SimpleStringProperty()
+    private val selectedInvocations = SimpleStringProperty()
+    private val selectedReplicas = SimpleStringProperty()
     private val selectedUrl = SimpleStringProperty()
 
     override val root = hbox {
+        title = "ISI"
         spacing = 20.0
 
         vbox {
-            padding = Insets(20.0)
+            padding = Insets(20.0, 0.0, 20.0, 20.0)
             spacing = 20.0
 
             listview<Function> {
@@ -47,6 +50,8 @@ class HelloWorld : View() {
                 selectionModel.selectedItemProperty().onChange {
                     selectedName.value = it?.name
                     selectedUrl.value = it?.url
+                    selectedInvocations.value = "Invocations: ${it?.invocations}"
+                    selectedReplicas.value = "Replicas: ${it?.replicas}"
                 }
 
                 selectionModel.select(0)
@@ -59,7 +64,7 @@ class HelloWorld : View() {
 
                 style {
                     fontSize = Dimension(1.5, Dimension.LinearUnits.em)
-                    backgroundColor += c("#D87B3C")
+                    backgroundColor += c("#BC8BA4")
                     textFill = c("#FFFFFF")
                     fontWeight = FontWeight.BOLD
                 }
@@ -68,6 +73,10 @@ class HelloWorld : View() {
                     openInternalWindow(DeployNewFunctionUI::class)
                 }
             }
+        }
+
+        separator(Orientation.VERTICAL) {
+            padding = Insets(20.0, 0.0, 20.0, 0.0)
         }
 
         vbox {
@@ -81,17 +90,45 @@ class HelloWorld : View() {
                 style {
                     fontSize = Dimension(4.0, Dimension.LinearUnits.em)
                     fontWeight = FontWeight.BOLD
-                    textFill = c("#282828")
+                    textFill = c("#D87B3C")
                 }
             }
 
-            label {
-                textProperty().bind(selectedUrl)
+            separator(Orientation.HORIZONTAL)
 
-                style {
-                    fontSize = Dimension(1.5, Dimension.LinearUnits.em)
-                    fontStyle = FontPosture.ITALIC
-                    textFill = c("#58564C")
+            hbox {
+                spacing = 40.0
+
+                label {
+                    textProperty().bind(selectedUrl)
+
+                    style {
+                        fontSize = Dimension(1.5, Dimension.LinearUnits.em)
+                        fontStyle = FontPosture.ITALIC
+                        textFill = c("#58564C")
+                    }
+                }
+
+                separator(Orientation.VERTICAL)
+
+                label {
+                    textProperty().bind(selectedInvocations)
+
+                    style {
+                        fontSize = Dimension(1.5, Dimension.LinearUnits.em)
+                        textFill = c("#58564C")
+                    }
+                }
+
+                separator(Orientation.VERTICAL)
+
+                label {
+                    textProperty().bind(selectedReplicas)
+
+                    style {
+                        fontSize = Dimension(1.5, Dimension.LinearUnits.em)
+                        textFill = c("#58564C")
+                    }
                 }
             }
 
