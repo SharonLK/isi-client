@@ -6,15 +6,14 @@ import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import tornadofx.Controller
-import java.io.BufferedReader
-import java.io.File
-import java.io.FileReader
-import java.io.InputStreamReader
+import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
 
 class MainUIController : Controller() {
     val names: ObservableList<Function> = FXCollections.observableArrayList()
+
+    private val serverUrl: String
 
     init {
         // Read the config file found in the resources directory
@@ -27,7 +26,8 @@ class MainUIController : Controller() {
         val port = (json["port"] as Long).toInt()
 
         // Create an HTTP URL connection and send a GET request to the server
-        val url = URL("http://$server:$port")
+        serverUrl = "http://$server:$port"
+        val url = URL(serverUrl)
         val connection = url.openConnection() as HttpURLConnection
         connection.requestMethod = "GET"
 
@@ -51,8 +51,20 @@ class MainUIController : Controller() {
         }
     }
 
-    fun downloadFunction(function: String) {
-        println(function)
+    fun downloadFunction(function: String, file: File) {
+        val url = URL("$serverUrl/download")
+        val connection = url.openConnection() as HttpURLConnection
+        connection.setRequestProperty("name", function)
+        connection.requestMethod = "GET"
+        connection.doInput = true
+
+        if (connection.responseCode == HttpURLConnection.HTTP_OK) {
+            val bos = BufferedOutputStream(FileOutputStream(file))
+            bos.write(connection.inputStream.readBytes())
+            bos.close()
+
+            println("ZIP received")
+        }
     }
 }
 

@@ -6,6 +6,7 @@ import javafx.geometry.Orientation
 import javafx.scene.layout.Priority
 import javafx.scene.text.FontPosture
 import javafx.scene.text.FontWeight
+import javafx.stage.FileChooser
 import javafx.stage.Stage
 import tornadofx.*
 
@@ -150,7 +151,12 @@ class HelloWorld : View() {
                     }
 
                     action {
-                        controller.downloadFunction(selectedName.value)
+                        val fileChooser = FileChooser()
+                        val file = fileChooser.showSaveDialog(null)
+
+                        if (file != null) {
+                            controller.downloadFunction(selectedName.value, file)
+                        }
                     }
                 }
 
