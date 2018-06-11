@@ -75,6 +75,26 @@ class MainUIController : Controller() {
             println("ZIP received")
         }
     }
+
+    fun resubmitFunction(name: String, file: File) {
+        val url = URL("$serverUrl/resubmit")
+        val connection = url.openConnection() as HttpURLConnection
+        connection.requestMethod = "POST"
+        connection.setRequestProperty("func_name", name)
+        connection.doOutput = true
+
+        // Stream the ZIP file to the output stream of this HTTP connection
+        val fis = FileInputStream(file)
+        val bis = BufferedInputStream(fis)
+        connection.outputStream.write(bis.readBytes())
+
+        bis.close()
+        fis.close()
+
+        if (connection.responseCode == HttpURLConnection.HTTP_OK) {
+            println("Hello World")
+        }
+    }
 }
 
 class Function(val name: String, val url: String, val invocations: Int, val replicas: Int) {

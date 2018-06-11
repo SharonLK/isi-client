@@ -163,11 +163,19 @@ class HelloWorld : View() {
                 button("Re-submit") {
                     prefHeightProperty().set(60.0)
                     prefWidthProperty().set(150.0)
+
                     style {
                         fontSize = Dimension(1.5, Dimension.LinearUnits.em)
                         backgroundColor += c("#7EAB75")
                         textFill = c("#FFFFFF")
                         fontWeight = FontWeight.BOLD
+                    }
+
+                    action {
+                        openInternalWindow(ResubmitFunctionUI::class)
+                        find<ResubmitFunctionUI>().apply {
+                            name.value = selectedName.value
+                        }
                     }
                 }
 
