@@ -8,7 +8,8 @@ import javafx.scene.text.FontPosture
 import javafx.scene.text.FontWeight
 import javafx.stage.FileChooser
 import javafx.stage.Stage
-import tornadofx.*
+    import tornadofx.*
+import java.net.HttpURLConnection
 
 fun main(args: Array<String>) {
     launch<Screen>(args)
@@ -192,8 +193,18 @@ class HelloWorld : View() {
                         textFill = c("#FFFFFF")
                         fontWeight = FontWeight.BOLD
                     }
+
+                    action {
+                        val name = mapOf<String, String>("name" to selectedName.value)
+                        val connection = postConnectToServer(name, "remove")
+                        if (connection.responseCode == HttpURLConnection.HTTP_OK) {
+                            println("Function removed successfully")
+                        }
+                    }
+
                 }
             }
         }
     }
+
 }
