@@ -13,7 +13,7 @@ import java.net.URL
 class ResubmitFunctionController : Controller() {
     fun resubmit(name: String, filePath: String) {
         val nameProp = mutableMapOf("name" to name)
-        val connection = postConnectToServer(propertyMap = nameProp, typeOfRequest = "post")
+        val connection = this.postConnectToServer(propertyMap = nameProp, typeOfRequest = "post")
 
         // Stream the ZIP file to the output stream of this HTTP connection
         val fis = FileInputStream(filePath)
