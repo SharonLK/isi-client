@@ -12,21 +12,8 @@ import java.net.URL
 
 class ResubmitFunctionController : Controller() {
     fun resubmit(name: String, filePath: String) {
-        // Read the config file found in the resources directory
-        val config = File(javaClass.classLoader.getResource("config.json").file)
-        val parser = JSONParser()
-        val json = parser.parse(FileReader(config)) as JSONObject
-
-        // Get the server properties
-        val server = json["server"] as String
-        val port = (json["port"] as Long).toInt()
-
-        // Create an HTTP URL connection and set a POST request to the server with all needed information
-        val url = URL("http://$server:$port/post")
-        val connection = url.openConnection() as HttpURLConnection
-        connection.requestMethod = "POST"
-        connection.setRequestProperty("name", name)
-        connection.doOutput = true
+        val nameProp = mutableMapOf("name" to name)
+        val connection = postConnectToServer(propertyMap = nameProp, typeOfRequest = "post")
 
         // Stream the ZIP file to the output stream of this HTTP connection
         val fis = FileInputStream(filePath)
