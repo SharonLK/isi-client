@@ -27,6 +27,11 @@ class MainUIController : Controller() {
 
         // Create an HTTP URL connection and send a GET request to the server
         serverUrl = "http://$server:$port"
+
+        receiveData()
+    }
+
+    private fun receiveData() {
         val url = URL(serverUrl)
         val connection = url.openConnection() as HttpURLConnection
         connection.requestMethod = "GET"
@@ -35,7 +40,11 @@ class MainUIController : Controller() {
             // Read the JSON file that was returned by the server
             val socketIn = BufferedReader(InputStreamReader(connection.inputStream))
             val response = socketIn.lines().reduce("", { str1, str2 -> str1 + str2 })
-            val data = parser.parse(response) as JSONObject
+            val data = JSONParser().parse(response) as JSONObject
+
+
+
+            names.clear()
 
             // Iterate over all functions that were returned and them to the internal list of functions
             val functions = data["functions"] as JSONArray
