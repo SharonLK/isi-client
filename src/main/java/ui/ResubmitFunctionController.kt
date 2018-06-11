@@ -22,7 +22,7 @@ class ResubmitFunctionController : Controller() {
         val port = (json["port"] as Long).toInt()
 
         // Create an HTTP URL connection and set a POST request to the server with all needed information
-        val url = URL("http://$server:$port/post")
+        val url = URL("http://$server:$port/resubmit")
         val connection = url.openConnection() as HttpURLConnection
         connection.requestMethod = "POST"
         connection.setRequestProperty("name", name)
