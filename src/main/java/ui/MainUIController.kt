@@ -42,18 +42,29 @@ class MainUIController : Controller() {
             val response = socketIn.lines().reduce("", { str1, str2 -> str1 + str2 })
             val data = JSONParser().parse(response) as JSONObject
 
-
-
-            names.clear()
-
             // Iterate over all functions that were returned and them to the internal list of functions
             val functions = data["functions"] as JSONArray
             for (i in 0 until functions.size) {
+                // Retrieve information of the function from the JSON object
                 val function = functions[i] as JSONObject
-                names.add(Function(function["name"] as String,
-                        function["url"] as String,
-                        (function["invocations"] as Long).toInt(),
-                        (function["replicas"] as Long).toInt()))
+                val name = function["name"]
+                val funcUrl = function["url"]
+                val invocations = (function["invocations"] as Long).toInt()
+                val replicas = (function["replicas"] as Long).toInt()
+
+                // Check if a function with that name already exists in internal DB
+                val first = names.firstOrNull { func -> func.name == name }
+
+                if (first == null) {
+                    // If function doesn't exist in internal DB, add it
+                    names.add(Function(name as String,
+                            funcUrl as String,
+                            invocations,
+                            replicas))
+                } else {
+                    // If function already exists in internal DB, update amount of invocations
+                    first.invocations = invocations
+                }
             }
 
             socketIn.close()
@@ -97,6 +108,6 @@ class MainUIController : Controller() {
     }
 }
 
-class Function(val name: String, val url: String, val invocations: Int, val replicas: Int) {
+class Function(val name: String, val url: String, var invocations: Int, var replicas: Int) {
     override fun toString(): String = name
 }
