@@ -16,23 +16,27 @@ import java.io.FileReader
 import java.net.HttpURLConnection
 import java.net.URL
 
-fun Controller.postConnectToServer (propertyMap : Map<String, String> = mapOf(),
-                                    typeOfRequest : String): HttpURLConnection
-{
+fun Controller.connectServer(requestPath: String,
+                             requestType: String,
+                             properties: Map<String, String> = mapOf()): HttpURLConnection {
     // Read the config file found in the resources directory
     val config = File(this.javaClass.classLoader.getResource("config.json").file)
     val parser = JSONParser()
     val json = parser.parse(FileReader(config)) as JSONObject
 
-    // Get the server properties
+    // Get the server parameters
     val server = json["server"] as String
     val port = (json["port"] as Long).toInt()
 
-    // Create an HTTP URL connection and set a POST request to the server with all needed information
-    val url = URL("http://$server:$port/$typeOfRequest")
+    // Create the connection to the given path and set the request method accordingly (POST, GET, PUT, DELETE, etc...)
+    val url = URL("http://$server:$port/$requestPath")
     val connection = url.openConnection() as HttpURLConnection
-    connection.requestMethod = "POST"
-    propertyMap.forEach { prop, value -> connection.setRequestProperty(prop, value) }
+    connection.requestMethod = requestType
+
+    // Set the HTTP headers according to the properties given
+    properties.forEach { property, value -> connection.setRequestProperty(property, value) }
+
+    // In case the connection will send output to the server, we turn on this flag
     connection.doOutput = true
 
     return connection
@@ -222,8 +226,10 @@ class HelloWorld : View() {
                     }
 
                     action {
-                        val name = mapOf<String, String>("name" to selectedName.value)
-                        val connection = controller.postConnectToServer(name, "remove")
+                        val connection = controller.connectServer(requestPath = "/remove",
+                                requestType = "POST",
+                                properties = mapOf("name" to selectedName.value))
+
                         if (connection.responseCode == HttpURLConnection.HTTP_OK) {
                             println("Function removed successfully")
                         }
