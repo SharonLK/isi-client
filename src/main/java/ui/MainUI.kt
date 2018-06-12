@@ -232,6 +232,11 @@ class HelloWorld : View() {
 
                         if (connection.responseCode == HttpURLConnection.HTTP_OK) {
                             println("Function removed successfully")
+
+                            val function = controller.names.firstOrNull { func -> func.name == selectedName.value }
+                            if (function != null) {
+                                controller.names.remove(function)
+                            }
                         }
                     }
 
