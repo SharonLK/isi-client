@@ -226,7 +226,7 @@ class HelloWorld : View() {
                     }
 
                     action {
-                        val connection = controller.connectServer(requestPath = "/remove",
+                        val connection = controller.connectServer(requestPath = "remove",
                                 requestType = "POST",
                                 properties = mapOf("name" to selectedName.value))
 

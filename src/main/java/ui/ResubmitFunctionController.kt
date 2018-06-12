@@ -7,7 +7,7 @@ import java.net.HttpURLConnection
 
 class ResubmitFunctionController : Controller() {
     fun resubmit(name: String, filePath: String) {
-        val connection = this.connectServer(requestPath = "/post",
+        val connection = this.connectServer(requestPath = "resubmit",
                 requestType = "POST",
                 properties = mapOf("name" to name))
 
