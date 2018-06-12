@@ -79,6 +79,7 @@ class MainUIController : Controller() {
                 } else {
                     // If function already exists in internal DB, update amount of invocations
                     first.invocations = invocations
+                    first.replicas = replicas
                 }
             }
 
