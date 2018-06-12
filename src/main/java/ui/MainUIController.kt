@@ -1,5 +1,6 @@
 package ui
 
+import javafx.application.Platform
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import org.json.simple.JSONArray
@@ -15,6 +16,8 @@ class MainUIController : Controller() {
 
     private val serverUrl: String
 
+    private var running = true
+
     init {
         // Read the config file found in the resources directory
         val file = File(javaClass.classLoader.getResource("config.json").file)
@@ -28,7 +31,19 @@ class MainUIController : Controller() {
         // Create an HTTP URL connection and send a GET request to the server
         serverUrl = "http://$server:$port"
 
-        receiveData()
+        runAsync(true) {
+            while (running) {
+                Platform.runLater {
+                    receiveData()
+                }
+
+                Thread.sleep(3000)
+            }
+        }
+
+        primaryStage.setOnCloseRequest {
+            running = false
+        }
     }
 
     private fun receiveData() {
@@ -84,26 +99,6 @@ class MainUIController : Controller() {
             bos.close()
 
             println("ZIP received")
-        }
-    }
-
-    fun resubmitFunction(name: String, file: File) {
-        val url = URL("$serverUrl/resubmit")
-        val connection = url.openConnection() as HttpURLConnection
-        connection.requestMethod = "POST"
-        connection.setRequestProperty("func_name", name)
-        connection.doOutput = true
-
-        // Stream the ZIP file to the output stream of this HTTP connection
-        val fis = FileInputStream(file)
-        val bis = BufferedInputStream(fis)
-        connection.outputStream.write(bis.readBytes())
-
-        bis.close()
-        fis.close()
-
-        if (connection.responseCode == HttpURLConnection.HTTP_OK) {
-            println("Hello World")
         }
     }
 }
